@@ -17,8 +17,18 @@ Route::get('/', function () { // WHEN YOU GET TO THE HOME PAGE, LOAD THE welcome
     return view('posts'); // view IS SOMETHING THE USER SEES. SOMETHING THAT YOU CAN SEE WITH YOUR EYES
 }); // NO NEED TO WRITE welcome.blade.php JUST WE CAN WRITE THE NAME OF THE FILE welcome and it will work.
 
-Route::get('post', function () {
-    return view('post');
+Route::get('posts/{post}', function ($slug){  // {} is a wildcard
+    $path = __DIR__."/../resources/posts/{$slug}.html";
+    if(! file_exists($path)){
+//        dd('file does not exist');
+//        abort(404);
+        return redirect('/');
+    }
+    $post = file_get_contents($path); // $post
+    return view('post', [
+        'post' => $post
+    ]);
+//    return $slug;
 });
 
 Route::get('/hello', function () {

@@ -14,8 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () { // WHEN YOU GET TO THE HOME PAGE, LOAD THE welcome VIEW
-    return view('welcome'); // view IS SOMETHING THE USER SEES. SOMETHING THAT YOU CAN SEE WITH YOUR EYES
+    return view('posts'); // view IS SOMETHING THE USER SEES. SOMETHING THAT YOU CAN SEE WITH YOUR EYES
 }); // NO NEED TO WRITE welcome.blade.php JUST WE CAN WRITE THE NAME OF THE FILE welcome and it will work.
+
+Route::get('post', function () {
+    return view('post');
+});
 
 Route::get('/hello', function () {
     return ['foo' => 'bar'];

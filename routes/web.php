@@ -19,6 +19,7 @@ Route::get('/', function () { // WHEN YOU GET TO THE HOME PAGE, LOAD THE welcome
 
 Route::get('posts/{post}', function ($slug){  // {} is a wildcard
     $path = __DIR__."/../resources/posts/{$slug}.html";
+//    dd($path);
     if(! file_exists($path)){
 //        dd('file does not exist');
 //        abort(404);
@@ -29,7 +30,8 @@ Route::get('posts/{post}', function ($slug){  // {} is a wildcard
         'post' => $post
     ]);
 //    return $slug;
-});
+})->where('post', '[A-z_\-]+');
+//in brackets look for anything could be Capital i could be lower case and the plus sign means : find one or more of the proceeding characters
 
 Route::get('/hello', function () {
     return ['foo' => 'bar'];

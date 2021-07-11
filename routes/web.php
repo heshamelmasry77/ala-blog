@@ -18,12 +18,12 @@ Route::get('/', function () { // WHEN YOU GET TO THE HOME PAGE, LOAD THE welcome
 }); // NO NEED TO WRITE welcome.blade.php JUST WE CAN WRITE THE NAME OF THE FILE welcome and it will work.
 
 Route::get('posts/{post}', function ($slug) {  // {} is a wildcard
-    $path = __DIR__ . "/../resources/posts/{$slug}.html";
+    $path = __DIR__ . "/../resources/posts/{$slug}.html"; // path to the post
 //    dd($path);
     if (!file_exists($path)) {
-//        dd('file does not exist');
+//        dd('file does not exist'); die and dump kills the execution and shows something
 //        abort(404);
-        return redirect('/');
+        return redirect('/'); // go to home page
     }
     $post = cache()->remember("posts.{$slug}", now()->addMinutes(1), function () use ($path) {
 //        var_dump('file_get_contents');
@@ -32,7 +32,7 @@ Route::get('posts/{post}', function ($slug) {  // {} is a wildcard
     return view('post', [
         'post' => $post
     ]);
-//    return $slug;
+//    return $slug;, post is the name of the slug
 })->where('post', '[A-z_\-]+');
 //in brackets look for anything could be Capital i could be lower case and the plus sign means : find one or more of the proceeding characters
 

@@ -26,23 +26,27 @@ class Post
 
     public static function allPosts(): \Illuminate\Support\Collection
     {
-        $files = File::files(resource_path("posts"));
-        return collect($files)
-            ->map(function ($file) {
-                $document = \Spatie\YamlFrontMatter\YamlFrontMatter::parseFile($file);
-                return new Post(
-                    $document->title,
-                    $document->excerpt,
-                    $document->date,
-                    $document->body(),
-                    $document->slug
-                );
-            });
+        return cache()->rememberForever('posts.all', function () {
+            $files = File::files(resource_path("posts"));
+            return collect($files)
+                ->map(function ($file) {
+                    $document = \Spatie\YamlFrontMatter\YamlFrontMatter::parseFile($file);
+                    return new Post(
+                        $document->title,
+                        $document->excerpt,
+                        $document->date,
+                        $document->body(),
+                        $document->slug
+                    );
+                })
+                ->sortByDesc('date');
+        });
+
     }
 
     public static function find($slug)
     {
-     // of all the blog posts, find the one with a slug that matches the one that was requested
+        // of all the blog posts, find the one with a slug that matches the one that was requested
         return static::allPosts()->firstWhere('slug', $slug);
     }
 }

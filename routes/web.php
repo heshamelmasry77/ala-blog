@@ -2,6 +2,7 @@
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    // WHEN YOU GET TO THE HOME PAGE, LOAD THE welcome VIEW
-    $posts = Post::allPosts();
+
+//    $posts = array_map(function ($file) {
+//
+//    }, $files);
 //    dd($posts);
+//    // WHEN YOU GET TO THE HOME PAGE, LOAD THE welcome VIEW
+    $posts = Post::allPosts();
+////    dd($posts);
     return view('posts', [
         'posts' => $posts
     ]);

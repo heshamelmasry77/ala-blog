@@ -9,30 +9,40 @@ use Illuminate\Support\Facades\File;
 
 class Post
 {
-    public static function allPosts()
+    public $title;
+    public $excerpt;
+    public $date;
+    public $body;
+    public $slug;
+
+    public function __construct($title, $excerpt, $date, $body, $slug)
     {
-        $files = File::files(resource_path("posts/"));
-//        array_map(function ($file) {
-//            return $file->getContents();
-//        }, $files);
-        return array_map(function ($file) {
-            return $file->getContents();
-        }, $files);
-//        return File::files(resource_path("posts/"));
+        $this->title = $title;
+        $this->excerpt = $excerpt;
+        $this->date = $date;
+        $this->body = $body;
+        $this->slug = $slug;
+    }
+
+    public static function allPosts(): \Illuminate\Support\Collection
+    {
+        $files = File::files(resource_path("posts"));
+        return collect($files)
+            ->map(function ($file) {
+                $document = \Spatie\YamlFrontMatter\YamlFrontMatter::parseFile($file);
+                return new Post(
+                    $document->title,
+                    $document->excerpt,
+                    $document->date,
+                    $document->body(),
+                    $document->slug
+                );
+            });
     }
 
     public static function find($slug)
     {
-        $path = resource_path("posts/{$slug}.html"); // path to the post resource path is giving us the path of resources folder
-        if (!file_exists($path)) {
-//        dd('file does not exist'); die and dump kills the execution and shows something
-//        abort(404);
-            throw new ModelNotFoundException(); // throw an exception that this model doesn't exist
-        }
-
-        return cache()->remember("posts.{$slug}", now()->addMinutes(1), function () use ($path) {
-//        var_dump('file_get_contents');
-            return file_get_contents($path); // $post
-        });
+     // of all the blog posts, find the one with a slug that matches the one that was requested
+        return static::allPosts()->firstWhere('slug', $slug);
     }
 }

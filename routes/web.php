@@ -34,7 +34,8 @@ Route::get('posts/{post}', function ($slug) {  // {} is a wildcard
     return view('post', [
         'post' => $post
     ]);
-})->where('post', '[A-z_\-]+');
+});
+//->where('post', '[A-z_\-]+')
 // in brackets look for anything could be Capital
 // i could be lower case and the plus sign means : find one or more of the proceeding characters
 
